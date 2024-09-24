@@ -1,0 +1,9 @@
+create Table Customer(custname char(15) primary key, customerstreet varchar(10), customercity char(10) Not Null);
+create Table Branch(branchname char(10) primary key , branchcity char(10) Not Null , asset Number(10) Not Null Check(asset>0));
+create Table Account(accnum varchar(15) primary key,branchname char(15) ,balance Number(15) Check(balance>500) );
+create Table Loan(loanno varchar(10) primary key, branchname char(10), amount Number(10) Check(amount>0));
+
+create Table Borrower(custname char(10) ,loanno varchar(10), Primary Key (custname ,loanno), Foreign key(custname) References Customer , Foreign key(loanno) References Loan);
+create Table Depositor(custname char(10) ,accnum varchar(10), Primary Key (custname ,accnum), Foreign key(custname) References Customer , Foreign key(accnum) References Accoun
+
+select * from tab;
