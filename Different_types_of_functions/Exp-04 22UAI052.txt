@@ -1,0 +1,138 @@
+create Table Customer(custname char(15) primary key, customerstreet varchar(20), customercity char(10) Not Null);
+create Table Branch(branchname char(10) primary key , branchcity char(10) Not Null , asset Number(10) Not Null Check(asset>0));
+create Table Account(accnum varchar(15) primary key, branchname char(15) ,balance Number(15) Check(balance=>500) );
+create Table Loan(loanno varchar(10) primary key, branchname char(10), amount Number(10) Check(amount>0));
+
+create Table Borrower(custname char(10) ,loanno varchar(10), Primary Key (custname ,loanno), Foreign key(custname) References Customer , Foreign key(loanno) References Loan);
+
+ALTER TABLE Borrower MODIFY(custname char(15),loanno VARCHAR(10));
+
+create Table Depositor(custname char(10) ,accnum varchar(10), Primary Key (custname ,accnum), Foreign key(custname) References Customer , Foreign key(accnum) References Account);
+
+ALTER TABLE Depositor MODIFY(custname char(15),accnum VARCHAR(15));
+
+Insert into Customer Values('Atharv','colonyrd','kolhapur');
+Delete FROM Customer WHERE custname = 'Atharv' ;
+
+Insert into Customer Values('Adams','Spring','Pittsfield');
+Insert into Customer Values('Brooks','Senator','Brooklyn');
+Insert into Customer Values('Curry','North','Rye');
+Insert into Customer Values('Glenn','Sand Hill','Woodside');
+Insert into Customer Values('Green','Walnut','Stamford');
+Insert into Customer Values('Hayes','Main','Harrison');
+Insert into Customer Values('Johnson','Alma','Palo Alto');
+Insert into Customer Values('Jones','Main','Harrison');
+Insert into Customer Values('Lindsay','Park','Pittsfield');
+Insert into Customer Values('Smith','North','Rye');
+Insert into Customer Values('Turner','Putnam','Stamford');
+Insert into Customer Values('Williams','Nassau','Princeton');
+
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-101','Downtown',600);
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-102','Perryride',650);
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-201','Brighton','900');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-215','Mianus','700');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-217','Brighton','750');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-222','Redwood','700');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-305','Round Hill','850');
+
+Insert into Branch Values('Brighton','Brooklyn','7100000');
+Insert into Branch Values('Downtown','Brooklyn','9000000');
+Insert into Branch Values('Mianus','Horseneck','400000');
+Insert into Branch Values('North Town','Rye','3700000');
+Insert into Branch Values('Perryridge','Horseneck','1700000');
+Insert into Branch Values('Pownal','Bennington','300000');
+Insert into Branch Values('Redwood','Palo Alto','2100000');
+Insert into Branch Values('Round Hill','Horseneck','8000000');
+
+Insert into Loan Values('L-11','Round Hill','900');
+Insert into Loan Values('L-14','Downtown','1500');
+Insert into Loan Values('L-15','Perryridge','1500');
+Insert into Loan Values('L-16','Perryridge','1300');
+Insert into Loan Values('L-17','Downtown','1000');
+Insert into Loan Values('L-23','Redwood','2000');
+Insert into Loan Values('L-93','Mianus','500');
+
+Insert into Borrower Values('Adams','L-16');
+Insert into Borrower Values('Curry','L-93');
+Insert into Borrower Values('Hayes','L-15');
+Insert into Borrower Values('Jackson','L-14');
+Insert into Borrower Values('Jones','L-17');
+Insert into Borrower Values('Smith','L-11');
+Insert into Borrower Values('Smith','L-23');
+Insert into Borrower Values('Williams','L-17');
+
+Insert into Depositor Values('Hayes','A-102');
+Insert into Depositor Values('Johnson','A-101');
+Insert into Depositor Values('Johnson','A-201');
+Insert into Depositor Values('Jones','A-217');
+Insert into Depositor Values('Lindsay','A-222');
+Insert into Depositor Values('Smith','A-215');
+Insert into Depositor Values('Turner','A-305');
+
+select * from Customer;
+select * from Account;
+select * from Branch;
+select * from Loan;
+select * from Depositor;
+select * from Borrower;
+
+
+
+select * from tab;
+
+SELECT AVG (balance) FROM Account Where branchname='Perryride';
+select * from Account;
+
+Select MAX(amount) from Loan;
+
+select Count(accnum) from Account Where balance between 700 and 900;
+Select * From Account Where balance between 700 and 900;
+Select accnum From Account Where balance between 700 and 900;
+
+select Count(accnum) From Account Where branchname='Brighton';
+Select accnum From Account Where branchname='Brighton';
+Select * From Account Where branchname='Brighton';
+
+Select Distinct customercity From Customer;
+
+Select Count(branchname) From Loan;
+
+Drop table Employee;
+
+Create Table Employee(emp_no varchar(15), e_name char(20), e_address char(20), e_phone Number(10), dept_no Varchar(15), dept_name char(15), job_id Varchar(15), designation char(20), salary FLOAT(15), joining_date DATE); 
+
+Insert into Employee Values ('A-11','Smith','mumbai','9623778855','10','CSE','P1','Manager','100000','1-05-1981'); 
+Insert into Employee Values ('A-12','Jack','pune','9628578855','20','CSE','P1','Manager','50000','12-03-1981');
+Insert into Employee Values ('A-13','Jacob','hydrabad','9623799855','30','CSE','P1','Manager','10000','12-17-1981');
+Insert into Employee Values ('A-14','Sujal','mumbai','9623774455','40','CSE','P1','Manager','75000','01-19-1981');
+Insert into Employee Values ('A-15','Harsh','Kolhapur','9623778800','50','CSE','P1','Manager','45000','05-01-1981');
+Insert into Employee Values ('A-16','Harry','Ichalkaranji','9883778855','60','CSE','P1','Manager','35000','12-04-1981');
+
+select * from Employee;
+
+//List the E_no, E_name, Salary of all employees working for MANAGER:
+SELECT emp_no, e_name, salary FROM Employee WHERE designation = 'Manager';
+
+//Display all the details of the employee whose salary is more than the Sal of any IT PROFF
+SELECT * FROM Employee WHERE salary > (SELECT MAX(salary) FROM Employee WHERE designation = 'IT PROFF');
+
+//List the employees in the ascending order of Designations of those joined after 1981
+SELECT * FROM Employee WHERE joining_date > '12-31-1981'ORDER BY designation ASC;
+
+//List the employees along with their Experience and Daily Salary
+SELECT e_name, (YEAR(CURDATE()) - YEAR(joining_date)) AS experience, (salary / 30) AS daily_salary FROM Employee;
+
+//List the employees who are manager
+SELECT * FROM Employee WHERE designation IN ('Manager');
+
+//List the Enames starting with ‘S’:
+SELECT e_name FROM Employee WHERE e_name LIKE 'S%';
+
+//Display the name as well as the first five characters of name(s) starting with ‘H’
+SELECT e_name AS "first_five_characters" FROM Employee WHERE e_name LIKE 'H%';
+
+//List all the emps except ‘PRESIDENT’ & ‘MGR’ in asc order of Salaries:
+SELECT * FROM Employee WHERE designation NOT IN ('PRESIDENT', 'MGR')ORDER BY salary ASC;
+
+
+select sysdate from dual;
