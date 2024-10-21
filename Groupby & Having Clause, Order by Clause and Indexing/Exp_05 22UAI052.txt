@@ -1,0 +1,129 @@
+create Table Customer(custname char(15) primary key, customerstreet varchar(20), customercity char(10) Not Null);
+create Table Branch(branchname char(10) primary key , branchcity char(10) Not Null , asset Number(10) Not Null Check(asset>0));
+create Table Account(accnum varchar(15) primary key, branchname char(15) ,balance Number(15) Check(balance=>500) );
+create Table Loan(loanno varchar(10) primary key, branchname char(10), amount Number(10) Check(amount>0));
+
+create Table Borrower(custname char(10) ,loanno varchar(10), Primary Key (custname ,loanno), Foreign key(custname) References Customer , Foreign key(loanno) References Loan);
+
+ALTER TABLE Borrower MODIFY(custname char(15),loanno VARCHAR(10));
+
+create Table Depositor(custname char(10) ,accnum varchar(10), Primary Key (custname ,accnum), Foreign key(custname) References Customer , Foreign key(accnum) References Account);
+
+ALTER TABLE Depositor MODIFY(custname char(15),accnum VARCHAR(15));
+
+Insert into Customer Values('Atharv','colonyrd','kolhapur');
+Delete FROM Customer WHERE custname = 'Atharv' ;
+
+Insert into Customer Values('Adams','Spring','Pittsfield');
+Insert into Customer Values('Brooks','Senator','Brooklyn');
+Insert into Customer Values('Curry','North','Rye');
+Insert into Customer Values('Glenn','Sand Hill','Woodside');
+Insert into Customer Values('Green','Walnut','Stamford');
+Insert into Customer Values('Hayes','Main','Harrison');
+Insert into Customer Values('Johnson','Alma','Palo Alto');
+Insert into Customer Values('Jones','Main','Harrison');
+Insert into Customer Values('Lindsay','Park','Pittsfield');
+Insert into Customer Values('Smith','North','Rye');
+Insert into Customer Values('Turner','Putnam','Stamford');
+Insert into Customer Values('Williams','Nassau','Princeton');
+
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-101','Downtown',600);
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-102','Perryride',650);
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-201','Brighton','900');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-215','Mianus','700');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-217','Brighton','750');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-222','Redwood','700');
+INSERT INTO Account (accnum , branchname , balance) VALUES('A-305','Round Hill','850');
+
+Insert into Branch Values('Brighton','Brooklyn','7100000');
+Insert into Branch Values('Downtown','Brooklyn','9000000');
+Insert into Branch Values('Mianus','Horseneck','400000');
+Insert into Branch Values('North Town','Rye','3700000');
+Insert into Branch Values('Perryridge','Horseneck','1700000');
+Insert into Branch Values('Pownal','Bennington','300000');
+Insert into Branch Values('Redwood','Palo Alto','2100000');
+Insert into Branch Values('Round Hill','Horseneck','8000000');
+
+Insert into Loan Values('L-11','Round Hill','900');
+Insert into Loan Values('L-14','Downtown','1500');
+Insert into Loan Values('L-15','Perryridge','1500');
+Insert into Loan Values('L-16','Perryridge','1300');
+Insert into Loan Values('L-17','Downtown','1000');
+Insert into Loan Values('L-23','Redwood','2000');
+Insert into Loan Values('L-12','Mehfoox','1500');
+Insert into Loan Values('L-93','Mianus','500');
+
+Insert into Borrower Values('Adams','L-16');
+Insert into Borrower Values('Curry','L-93');
+Insert into Borrower Values('Hayes','L-15');
+Insert into Borrower Values('Jackson','L-14');
+Insert into Borrower Values('Jones','L-17');
+Insert into Borrower Values('Smith','L-11');
+Insert into Borrower Values('Smith','L-23');
+Insert into Borrower Values('Williams','L-17');
+
+Insert into Depositor Values('Hayes','A-102');
+Insert into Depositor Values('Johnson','A-101');
+Insert into Depositor Values('Johnson','A-201');
+Insert into Depositor Values('Jones','A-217');
+Insert into Depositor Values('Lindsay','A-222');
+Insert into Depositor Values('Smith','A-215');
+Insert into Depositor Values('Turner','A-305');
+
+select * from Customer;
+select * from Account;
+select * from Branch;
+select * from Loan;
+select * from Depositor;
+select * from Borrower;
+
+/*if there is two or more record with same amount then it will arrange the loanno in ascending order..*/
+SELECT * FROM Loan ORDER BY amount DESC, loanno ASC;  
+SELECT loanno, amount FROM Loan ORDER BY amount DESC, loanno ASC;
+
+/*it will make branchcity in asecnding order ,if there is same name of branchcity then it will make asset in desecding order*/
+SELECT branchname, branchcity, asset FROM Branch ORDER BY branchcity, asset DESC;
+
+/*It will give Average Balance in that Branchname if there is in one branch multi customer are present it will give Average of that...*/
+SELECT branchname, AVG(balance) AS Average_balance FROM Account GROUP BY branchname;
+
+/*It will give no_of_customer in Same city , in that city no_of_customer present*/
+SELECT customercity , COUNT(custname) AS No_Of_customers FROM Customer GROUP BY customercity ORDER BY customercity ASC ;
+
+/*it will give count of of Branch...*/
+SELECT COUNT(*) AS Num_branches FROM Branch;
+
+/*Average balance where balance is grater than 600..*/
+SELECT AVG(balance) AS Average_balance FROM Account WHERE balance > 600;
+
+/*It will Give Name of customer which is belonging in same city*/
+SELECT customercity FROM Customer GROUP BY customercity HAVING COUNT(custname) > 1;
+
+/*Q.2*/
+
+Create Table Employee(emp_no varchar(15), e_name char(20), e_address char(20), e_phone Number(10), dept_no Varchar(15), dept_name char(15), job_id Varchar(15), designation char(20), salary FLOAT(15), joining_date DATE); 
+
+Insert into Employee Values ('A-11','Smith','mumbai','9623778855','10','CSE','P1','Manager','100000','1-05-1981'); 
+Insert into Employee Values ('A-12','Jack','pune','9628578855','20','CSE','P1','Manager','50000','12-03-1981');
+Insert into Employee Values ('A-13','Jacob','hydrabad','9623799855','30','CSE','P1','Manager','10000','12-17-1981');
+Insert into Employee Values ('A-14','Sujal','mumbai','9623774455','40','CSE','P1','Manager','75000','01-19-1981');
+Insert into Employee Values ('A-15','Harsh','Kolhapur','9623778800','50','CSE','P1','Manager','45000','05-01-1981');
+Insert into Employee Values ('A-16','Harry','Ichalkaranji','9883778855','60','CSE','P1','Manager','35000','12-04-1981');
+
+select * from Employee;
+
+//it will give employee name which has minimum salary...
+SELECT job_id, SUM(salary) AS Total_salary FROM Employee GROUP BY job_id;
+
+//it will give whichever have minimum salary....
+SELECT * FROM Employee WHERE salary = (SELECT MIN(salary) FROM Employee);
+
+//it will give count of employee in which there are....
+SELECT dept_name, COUNT(*) AS num_employees FROM Employee GROUP BY dept_name;
+
+//it will give salary in increseaing order...
+SELECT * FROM Employee ORDER BY salary ASC;
+
+//Show the record of employee arning salary greater than16000 in each department.
+SELECT * FROM Employee WHERE salary > 16000;
+SELECT * FROM tab;
